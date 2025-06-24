@@ -9,7 +9,10 @@ app.use(express.json())
 // Routes
 app.use('/api/admin', require('./routes/authRoutes'))
 app.use('/api/public', require('./routes/authRoutes'))
-//app.use('/api/public', require('./routes/complaintRoutes'))
+
+// Admin complaint fetch route
+app.use('/api/admin', require('./routes/adminRoutes'))
+app.use('/api/public', require('./routes/publicRoutes'))
 
 app.get('/', (req, res) => {
   res.send('🌐 GovTrack API is running')

@@ -15,6 +15,7 @@ const Dashboard = () => {
     // 🔒 Fetch complaints from backend (replace with real API)
     const fetchData = async () => {
       try {
+        console.log('Token being sent:', token)
         const res = await axios.get('/admin/complaints', {
           headers: { Authorization: `Bearer ${token}` }
         })

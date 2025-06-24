@@ -1,26 +1,25 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
-import Dashboard from './pages/Dashboard'       // for officials
-import SubmitComplaint from './pages/SubmitComplaint' // for public users
-import { getToken } from './utils/auth.js'
+import Dashboard from './pages/Dashboard'
+import SubmitComplaint from './pages/SubmitComplaint'
+import RequireAuth from './components/RequireAuth'
 
 const App = () => {
-  const isAuthenticated = !!getToken()
-
   return (
     <Routes>
-      {/* Home Route → Login Tabs (Admin & Public) */}
       <Route path="/" element={<Login />} />
 
-      {/* Admin Dashboard – Protected */}
+      {/* 🔒 Admin Dashboard – Protected */}
       <Route
         path="/dashboard"
         element={
-          isAuthenticated ? <Dashboard /> : <Navigate to="/" />
+          <RequireAuth>
+            <Dashboard />
+          </RequireAuth>
         }
       />
 
-      {/* Public User Route */}
+      {/* 🌐 Public Complaint Form */}
       <Route path="/submit" element={<SubmitComplaint />} />
 
       {/* Fallback */}
