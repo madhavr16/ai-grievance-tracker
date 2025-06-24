@@ -10,4 +10,6 @@ export const setToken = (token) => {
 
 export const logout = () => {
   localStorage.removeItem('token')
+  localStorage.removeItem('role') // ✅ clear role too
 }
+export const getUserRole = () => localStorage.getItem('role')

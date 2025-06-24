@@ -23,6 +23,7 @@ const SignupAdmin = () => {
       const url = isSignup ? '/admin/register' : '/admin/login'
       const res = await axios.post(url, payload)
       localStorage.setItem('token', res.data.token)
+      localStorage.setItem('role', 'admin') // ✅ set admin role
       navigate('/dashboard')
     } catch (err) {
       setError(err?.response?.data?.error || 'Something went wrong')

@@ -25,6 +25,7 @@ const OTPLoginPublic = () => {
     try {
       const res = await axios.post('/public/verify-otp', { phone, otp })
       localStorage.setItem('token', res.data.token)
+      localStorage.setItem('role', 'public') // ✅ set public role
       navigate('/submit')
     } catch {
       setError('Invalid OTP. Please check and try again.')

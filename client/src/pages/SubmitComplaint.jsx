@@ -7,8 +7,8 @@ const SubmitComplaint = () => {
   const navigate = useNavigate()
   const [userText, setUserText] = useState('')
   const [locality, setLocality] = useState('')
-  const [department, setDepartment] = useState('Sanitation')
-  const [urgency, setUrgency] = useState('low')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
   const [success, setSuccess] = useState('')
   const [error, setError] = useState('')
 
@@ -20,30 +20,48 @@ const SubmitComplaint = () => {
     try {
       await axios.post(
         '/public/complaint',
-        { userText, locality, department, urgency },
+        { userText, locality, name, phone },
         { headers: { Authorization: `Bearer ${token}` } }
       )
-      setSuccess('Complaint submitted successfully!')
+      setSuccess('✅ Complaint submitted successfully!')
       setUserText('')
       setLocality('')
-      setDepartment('Sanitation')
-      setUrgency('low')
+      setName('')
+      setPhone('')
       setError('')
     } catch (err) {
       console.error(err)
-      setError('Failed to submit complaint.')
+      setError('❌ Failed to submit complaint.')
       setSuccess('')
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-xl mx-auto bg-white p-6 shadow rounded">
-        <h2 className="text-2xl font-bold mb-4 text-center text-gray-800">Submit a Complaint</h2>
+    <div className="relative min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-6">
+      {/* 🔵 Text Logo */}
+      <div className="absolute top-6 left-6 text-blue-600 text-xl font-bold drop-shadow-lg select-none">
+        GovTrack
+      </div>
+
+      {/* Header Button */}
+      <div className="flex justify-end max-w-6xl mx-auto mb-6">
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm transition"
+        >
+          Go to Complaints
+        </button>
+      </div>
+
+      {/* Complaint Form Card */}
+      <div className="max-w-xl mx-auto bg-white p-8 shadow-2xl rounded-lg">
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
+          Submit a Complaint
+        </h2>
 
         <form onSubmit={handleSubmit}>
           <textarea
-            className="w-full border rounded p-3 mb-4"
+            className="w-full border border-gray-300 rounded-md p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
             rows="4"
             placeholder="Describe your issue..."
             value={userText}
@@ -53,40 +71,35 @@ const SubmitComplaint = () => {
 
           <input
             type="text"
-            className="w-full border rounded p-2 mb-4"
+            className="w-full border border-gray-300 rounded-md p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
             placeholder="Your locality / area"
             value={locality}
             onChange={(e) => setLocality(e.target.value)}
             required
           />
 
-          <label className="block mb-1 font-medium">Select Department</label>
-          <select
-            className="w-full border rounded p-2 mb-4"
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
+          <input
+            type="text"
+            className="w-full border border-gray-300 rounded-md p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             required
-          >
-            <option value="Sanitation">Sanitation</option>
-            <option value="Water">Water</option>
-            <option value="Electricity">Electricity</option>
-            <option value="Roads">Roads</option>
-            <option value="Sewage">Sewage</option>
-          </select>
+          />
 
-          <label className="block mb-1 font-medium">Urgency</label>
-          <select
-            className="w-full border rounded p-2 mb-4"
-            value={urgency}
-            onChange={(e) => setUrgency(e.target.value)}
+          <input
+            type="text"
+            className="w-full border border-gray-300 rounded-md p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            placeholder="Your Mobile Number"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             required
-          >
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
+          />
 
-          <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">
+          <button
+            type="submit"
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-md transition"
+          >
             Submit Complaint
           </button>
 

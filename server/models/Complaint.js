@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 
 const complaintSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  location: String,
+  userText: String,
+  locality: String,
+  name: String,
+  phone: String,
   status: {
     type: String,
     enum: ['Pending', 'In Progress', 'Resolved'],
@@ -12,8 +13,7 @@ const complaintSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
-  },
-  userPhone: String
+  }
 })
 
 module.exports = mongoose.model('Complaint', complaintSchema)
