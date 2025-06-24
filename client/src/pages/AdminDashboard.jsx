@@ -84,7 +84,10 @@ const AdminDashboard = () => {
                   <td className="px-4 py-3 align-top">
                     <select
                       value={c.status}
-                      onChange={(e) => handleStatusChange(c._id, e.target.value)}
+                      onChange={(e) => {
+                        console.log(`Updating status of ${c._id} to ${e.target.value}`)
+                        handleStatusChange(c._id, e.target.value)
+                      }}
                       className="border px-2 py-1 rounded"
                     >
                       <option value="Pending">Pending</option>

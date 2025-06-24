@@ -37,4 +37,21 @@ router.post('/complaint', async (req, res) => {
   }
 })
 
+router.post('/complaint/:id/feedback', async (req, res) => {
+  const { id } = req.params
+  const { feedback } = req.body
+
+  try {
+    const complaint = await Complaint.findById(id)
+    if (!complaint) return res.status(404).json({ error: 'Complaint not found' })
+
+    complaint.feedback = feedback
+    await complaint.save()
+    res.json({ message: 'Feedback saved' })
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to submit feedback' })
+  }
+})
+
+
 module.exports = router
