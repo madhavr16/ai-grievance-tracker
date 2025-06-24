@@ -51,44 +51,50 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-        <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+        <button
+          onClick={handleLogout}
+          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
           Logout
         </button>
       </div>
 
       <div className="overflow-x-auto bg-white shadow rounded-lg">
-        <table className="min-w-full text-sm text-left text-gray-700">
+        <table className="min-w-full text-sm text-left text-gray-700 table-fixed">
           <thead className="bg-gray-200 text-xs uppercase text-gray-600">
             <tr>
-              <th className="px-4 py-3">Issue</th>
-              <th className="px-4 py-3">Location</th>
-              <th className="px-4 py-3">Department</th>
-              <th className="px-4 py-3">Severity</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Actions</th>
+              <th className="px-4 py-3 w-[10%]">Name</th>
+              <th className="px-4 py-3 w-[10%]">Phone</th>
+              <th className="px-4 py-3 w-[20%]">Issue</th>
+              <th className="px-4 py-3 w-[15%]">Location</th>
+              <th className="px-4 py-3 w-[10%]">Department</th>
+              <th className="px-4 py-3 w-[10%]">Severity</th>
+              <th className="px-4 py-3 w-[10%]">Status</th>
+              <th className="px-4 py-3 w-[15%]">Actions</th>
             </tr>
           </thead>
           <tbody>
             {complaints.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-center py-4 text-gray-500">No complaints found</td>
+                <td colSpan="8" className="text-center py-4 text-gray-500">
+                  No complaints found
+                </td>
               </tr>
             ) : (
               complaints.map((c, index) => (
                 <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3 align-top">{c.userText}</td>
-                  <td className="px-4 py-3 align-top">{c.locality}</td>
-                  <td className="px-4 py-3 align-top">{c.department || '-'}</td>
-                  <td className="px-4 py-3 align-top">{c.urgency || '-'}</td>
-                  <td className="px-4 py-3 align-top capitalize">{c.status}</td>
-                  <td className="px-4 py-3 align-top">
+                  <td className="px-4 py-3">{c.name || '-'}</td>
+                  <td className="px-4 py-3">{c.phone || '-'}</td>
+                  <td className="px-4 py-3">{c.userText}</td>
+                  <td className="px-4 py-3">{c.locality}</td>
+                  <td className="px-4 py-3">{c.department || '-'}</td>
+                  <td className="px-4 py-3">{c.urgency || '-'}</td>
+                  <td className="px-4 py-3 capitalize">{c.status}</td>
+                  <td className="px-4 py-3">
                     <select
                       value={c.status}
-                      onChange={(e) => {
-                        console.log(`Updating status of ${c._id} to ${e.target.value}`)
-                        handleStatusChange(c._id, e.target.value)
-                      }}
-                      className="border px-2 py-1 rounded"
+                      onChange={(e) => handleStatusChange(c._id, e.target.value)}
+                      className="border px-2 py-1 rounded w-full"
                     >
                       <option value="Pending">Pending</option>
                       <option value="In Progress">In Progress</option>
