@@ -84,8 +84,8 @@ const PublicDashboard = () => {
                 <tr key={index} className="border-b hover:bg-gray-50 align-top">
                   <td className="px-4 py-3 w-1/5">{c.userText}</td>
                   <td className="px-4 py-3 w-1/6">{c.locality}</td>
-                  <td className="px-4 py-3 w-1/6 italic text-gray-400">ML predicted</td>
-                  <td className="px-4 py-3 w-1/6 italic text-gray-400">ML predicted</td>
+                  <td className="px-4 py-3 w-1/6">{c.department || 'N/A'}</td>
+                  <td className="px-4 py-3 w-1/6">{c.urgency || 'N/A'}</td>
                   <td className="px-4 py-3 w-1/6 capitalize">{c.status}</td>
                   <td className="px-4 py-3 w-1/4">
                     <div className="flex items-center gap-2">

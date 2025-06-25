@@ -1,4 +1,5 @@
 ##fast api app with endpoint /predict to accept and respond to user complaints
+from fastapi.middleware.cors import CORSMiddleware
 import pickle 
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
@@ -8,6 +9,14 @@ dept_model, urgency_model = load_models()
 
 ##creating fastapi app
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or specify ["http://localhost:3000"] for frontend dev
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Complaint(BaseModel):
     name: str = Field(min_length=2)
