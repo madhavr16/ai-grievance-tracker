@@ -6,6 +6,7 @@ numpy
 pickles
 nltk
 pydantic
+spacy==3.7.2
 langdetect
 googletrans==4.0.0-rc1
 #pip install langdetect googletrans==4.0.0-rc1
