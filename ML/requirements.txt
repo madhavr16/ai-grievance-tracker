@@ -7,4 +7,5 @@ pickles
 nltk
 pydantic
 langdetect
+googletrans==4.0.0-rc1
 #pip install langdetect googletrans==4.0.0-rc1
