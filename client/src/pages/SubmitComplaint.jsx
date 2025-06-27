@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../services/api'
 import { getToken } from '../utils/auth'
+import mlInstance from '../services/mlApi'
 
 const SubmitComplaint = () => {
   const navigate = useNavigate()
@@ -19,15 +20,11 @@ const SubmitComplaint = () => {
 
     try {
       // 1️⃣ ML PREDICTION via FastAPI
-      const mlRes = await fetch('http://localhost:8000/predict', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name,
-          phone,
-          description: userText,
-          location: locality
-        })
+      const mlRes = await mlInstance.post('/predict', {
+        name,
+        phone,
+        description: userText,
+        location: locality
       })
 
       const mlData = await mlRes.json()

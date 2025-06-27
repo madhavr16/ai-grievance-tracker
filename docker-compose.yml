@@ -24,7 +24,9 @@ services:
       - mongo
 
   ml:
-    build: ./ML
+    build: 
+      context: ./ml
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
 
