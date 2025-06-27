@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 const mlInstance = axios.create({
-  baseURL: 'http://56.228.30.161:8000', // FastAPI runs here by default
+  baseURL: 'http://ml:8000', // FastAPI runs here by default
   headers: {
     'Content-Type': 'application/json',
   },
