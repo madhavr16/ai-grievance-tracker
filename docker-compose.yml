@@ -12,10 +12,13 @@ services:
       - server
 
   server:
-    build: ./server
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     environment:
+      - JWT_SECRET=${JWT_SECRET}
       - MONGO_URI=${MONGO_URI}
     depends_on:
       - mongo
