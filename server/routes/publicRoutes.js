@@ -13,35 +13,48 @@ router.get('/complaints', async (req, res) => {
   }
 })
 
+const axios = require('axios')
+
 // Submit a new complaint
 router.post('/complaint', async (req, res) => {
-  const { userText, locality, name, phone, department, urgency, translatedText, entities } = req.body
+  const { userText, locality, name, phone } = req.body
 
   if (!userText || !locality || !name || !phone) {
     return res.status(400).json({ error: 'All fields are required' })
   }
 
   try {
+    // 🧠 Call ML service from Express backend
+    const mlRes = await axios.post('http://ml:8000/predict', {
+      name,
+      phone,
+      description: userText,
+      location: locality
+    })
+
+    const mlData = mlRes.data
+
     const complaint = new Complaint({
       userText,
       locality,
       name,
       phone,
-      department, // optional
-      urgency,    // optional
-      translatedText, // optional
-      entities        // optional
+      department: mlData.predicted_department,
+      urgency: mlData.predicted_urgency,
+      translatedText: mlData.translated_description,
+      entities: mlData.entities
     })
 
     await complaint.save()
     console.log('✅ Complaint saved:', complaint)
     res.status(201).json({ message: 'Complaint submitted successfully' })
   } catch (err) {
-    console.error('❌ Error saving complaint:', err.message)
+    console.error('❌ Error submitting complaint:', err.message)
     console.error(err.stack)
     res.status(500).json({ error: 'Failed to submit complaint' })
   }
 })
+
 
 // Submit feedback
 router.post('/complaint/:id/feedback', async (req, res) => {

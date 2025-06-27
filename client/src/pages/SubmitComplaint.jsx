@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from '../services/api'
 import { getToken } from '../utils/auth'
-import mlInstance from '../services/mlApi'
 
 const SubmitComplaint = () => {
   const navigate = useNavigate()
@@ -19,31 +18,12 @@ const SubmitComplaint = () => {
     if (!token) return navigate('/')
 
     try {
-      // 1️⃣ ML PREDICTION via FastAPI
-      const mlRes = await mlInstance.post('/predict', {
-        name,
-        phone,
-        description: userText,
-        location: locality
-      })
-
-      const mlData = await mlRes.data
-
-      const payload = {
-        name,
-        phone,
-        locality,
-        userText,
-        department: mlData.predicted_department,
-        urgency: mlData.predicted_urgency,
-        translatedText: mlData.translated_description,
-        entities: mlData.entities
-      }
-
-      // 2️⃣ SAVE to MongoDB via Express API
-      await axios.post('/public/complaint', payload, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
+      // Call only Express API, not ML directly
+      await axios.post(
+        '/public/complaint',
+        { name, phone, locality, userText },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
 
       setSuccess('✅ Complaint submitted successfully!')
       setUserText('')
