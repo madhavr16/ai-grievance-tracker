@@ -12,8 +12,8 @@ services:
     build: ./server
     ports:
       - "5000:5000"
-    environment:
-      - MONGO_URI=${MONGO_URI_LOCAL}
+    env_file:
+      - .env
     depends_on:
       - mongo
 
