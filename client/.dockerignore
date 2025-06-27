@@ -17,3 +17,5 @@ Thumbs.db
 # IDE/editor
 .vscode
 .idea
+
+.git
