@@ -27,7 +27,7 @@ const SubmitComplaint = () => {
         location: locality
       })
 
-      const mlData = await mlRes.json()
+      const mlData = await mlRes.data
 
       const payload = {
         name,
