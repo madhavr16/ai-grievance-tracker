@@ -70,9 +70,20 @@ docker-compose up --build
 ```
 
 ## 🖥 Screenshots
-<img width="1919" height="1029" alt="image" src="https://github.com/user-attachments/assets/324de9f1-b921-4f87-89cb-60dbdaaf3fda" />
-<img width="1919" height="1033" alt="image" src="https://github.com/user-attachments/assets/95ead597-a9d9-4877-a7b1-0dc6224ab0f5" />
-<img width="1919" height="1031" alt="image" src="https://github.com/user-attachments/assets/219bd1de-07dd-4df1-968a-43463d57b389" />
+
+### Website
+<img width="1919" height="1037" alt="image" src="https://github.com/user-attachments/assets/f3b2af37-0adb-4fdd-b3b5-0e8395478f5a" />
+<img width="1919" height="1035" alt="image" src="https://github.com/user-attachments/assets/ee006ceb-389b-4859-bbb4-758e9c4f7e14" />
+<img width="1919" height="1035" alt="image" src="https://github.com/user-attachments/assets/53ba7dfe-d730-4411-b454-1daa726c15c7" />
+<img width="1919" height="1036" alt="image" src="https://github.com/user-attachments/assets/a44af243-0363-4618-8dc7-4ed5ec94a5a6" />
+<img width="1919" height="1036" alt="image" src="https://github.com/user-attachments/assets/84ce6967-1059-4f74-a896-d18ad50f590f" />
+<img width="1919" height="1040" alt="image" src="https://github.com/user-attachments/assets/855e80dc-d384-4dad-ba23-d54af5c1934e" />
+
+### AWS Console
+<img width="1919" height="952" alt="image" src="https://github.com/user-attachments/assets/d7ee431e-ed2f-4704-9f04-fb7d84c6a8b2" />
+
+
+
 
 ## 🧠 Future Improvements
 
