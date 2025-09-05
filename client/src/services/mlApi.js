@@ -1,5 +1,6 @@
 // src/services/mlApi.js
 import axios from 'axios'
+import.meta.env
 
 const mlInstance = axios.create({
   baseURL: import.meta.env.VITE_ML_URL || 'http://ml:8000', // FastAPI runs here by default
