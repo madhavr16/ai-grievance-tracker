@@ -12,7 +12,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or specify ["http://localhost:3000"] for frontend dev
+    allow_origins=["https://ai-grievance-tracker.vercel.app/"],  # or specify ["http://localhost:3000"] for frontend dev
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

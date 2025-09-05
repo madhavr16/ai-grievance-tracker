@@ -3,7 +3,13 @@ const cors = require('cors')
 
 const app = express()
 
-app.use(cors())
+app.use(cors({
+  origin: [
+    'https://ai-grievance-tracker.vercel.app', // ✅ Vercel deployed frontend
+    'http://localhost:5173' // ✅ Local dev
+  ],
+  credentials: true
+}));
 app.use(express.json())
 
 // Routes
