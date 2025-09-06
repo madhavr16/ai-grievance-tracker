@@ -42,7 +42,7 @@ const PublicDashboard = () => {
       const feedback = feedbackMap[id]
       if (!feedback) return
       await axios.post(
-        `/public/complaint/${id}/feedback`,
+        `/complaint/${id}/feedback`,
         { feedback },
         { headers: { Authorization: `Bearer ${getToken()}` } }
       )

@@ -20,7 +20,7 @@ const SubmitComplaint = () => {
     try {
       // Call only Express API, not ML directly
       await axios.post(
-        '/complaints',
+        '/complaint',
         { name, phone, locality, userText },
         { headers: { Authorization: `Bearer ${token}` } }
       )
