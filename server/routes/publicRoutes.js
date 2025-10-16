@@ -36,32 +36,40 @@ router.post('/complaint', async (req, res) => {
     // 🧠 Call ML service from Express backend. Use ML_URL env var when deployed to Render.
     const mlBase = (process.env.ML_URL || 'http://ml:8000').replace(/\/+$/, '')
     const mlEndpoint = `${mlBase}/predict`
-    const mlRes = await axios.post(mlEndpoint, {
-      name,
-      phone,
-      description: userText,
-      location: locality
-    })
-
-    const mlData = mlRes.data
+    console.log('➡️ Calling ML endpoint:', mlEndpoint)
+    let mlData = null
+    try {
+      const mlRes = await axios.post(
+        mlEndpoint,
+        { name, phone, description: userText, location: locality },
+        { timeout: 5000 }
+      )
+      mlData = mlRes.data || null
+      console.log('⬅️ ML responded with status', mlRes.status)
+    } catch (mlErr) {
+      console.warn('⚠️ ML service call failed:', mlErr && mlErr.message)
+      // continue without ML predictions
+      mlData = null
+    }
 
     const complaint = new Complaint({
       userText,
       locality,
       name,
       phone,
-      department: mlData.predicted_department,
-      urgency: mlData.predicted_urgency,
-      translatedText: mlData.translated_description,
-      entities: mlData.entities
+      department: mlData ? mlData.predicted_department : null,
+      urgency: mlData ? mlData.predicted_urgency : null,
+      translatedText: mlData ? mlData.translated_description : null,
+      entities: mlData ? mlData.entities : []
     })
 
     await complaint.save()
-    console.log('✅ Complaint saved:', complaint)
-    res.status(201).json({ message: 'Complaint submitted successfully' })
+    console.log('✅ Complaint saved:', complaint._id)
+    const responseBody = { message: 'Complaint submitted successfully' }
+    if (!mlData) responseBody.ml = 'unavailable'
+    return res.status(201).json(responseBody)
   } catch (err) {
-    console.error('❌ Error submitting complaint:', err.message)
-    console.error(err.stack)
+    console.error('❌ Error submitting complaint:', err && err.stack ? err.stack : err)
     res.status(500).json({ error: 'Failed to submit complaint' })
   }
 })

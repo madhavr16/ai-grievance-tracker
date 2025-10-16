@@ -13,7 +13,8 @@ const AdminDashboard = () => {
 
     const fetchData = async () => {
       try {
-        const res = await axios.get('/complaints', {
+        // Ensure we call the admin complaints endpoint with the /api prefix
+        const res = await axios.get('/api/admin/complaints', {
           headers: { Authorization: `Bearer ${token}` }
         })
         setComplaints(res.data)
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
   const handleStatusChange = async (id, newStatus) => {
     try {
       await axios.patch(
-        `/admin/complaints/${id}`,
+        `/api/admin/complaints/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${getToken()}` } }
       )
