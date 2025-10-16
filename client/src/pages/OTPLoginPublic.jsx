@@ -13,7 +13,7 @@ const OTPLoginPublic = () => {
     e.preventDefault()
     setError('')
     try {
-  await axios.post('/api/public/send-otp', { phone })
+      await axios.post('/api/public/send-otp', { phone })
       setStep(2)
     } catch {
       setError('Failed to send OTP. Please try again.')
@@ -23,7 +23,7 @@ const OTPLoginPublic = () => {
   const verifyOtp = async (e) => {
     e.preventDefault()
     try {
-  const res = await axios.post('/api/public/verify-otp', { phone, otp })
+      const res = await axios.post('/api/public/verify-otp', { phone, otp })
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('role', 'public') // ✅ set public role
       navigate('/submit')
