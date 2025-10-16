@@ -20,6 +20,18 @@ app.use(cors(corsOptions))
 app.options('*', cors(corsOptions))
 app.use(express.json())
 
+// Explicit OPTIONS responder for extra safety (some hosts/proxies need this)
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    res.set('Access-Control-Allow-Origin', corsOptions.origin[0])
+    res.set('Access-Control-Allow-Methods', corsOptions.methods.join(', '))
+    res.set('Access-Control-Allow-Headers', corsOptions.allowedHeaders.join(', '))
+    res.set('Access-Control-Allow-Credentials', 'true')
+    return res.status(204).send('')
+  }
+  next()
+})
+
 // Diagnostic: print env vars that look like URLs to help debug path-to-regexp errors during deploy
 try {
   const urlLike = Object.keys(process.env).filter(k => /url|uri|path/i.test(k) && /https?:\/\//i.test(process.env[k] || ''))
