@@ -16,7 +16,16 @@ router.get('/', auth, async (req, res) => {
 // POST a new complaint (Public users submit)
 router.post('/', auth, async (req, res) => {
   try {
-    const { title, description, category } = req.body
+    // Support both new and legacy payload shapes.
+    // New API expects { title, description, category }
+    // Legacy clients may send { userText, locality, name, phone }
+    let { title, description, category, userText, name } = req.body || {}
+
+    // Map legacy fields to new ones when missing
+    if ((!title || !description) && userText) {
+      description = description || userText
+      title = title || (name ? `${name} - complaint` : 'Complaint')
+    }
 
     if (!title || !description) {
       return res.status(400).json({ error: 'Title and description are required' })
@@ -26,7 +35,7 @@ router.post('/', auth, async (req, res) => {
       title,
       description,
       category,
-      user: req.user.id // from JWT middleware
+      user: req.userId || (req.user && req.user.id) // from JWT middleware
     })
 
     await complaint.save()

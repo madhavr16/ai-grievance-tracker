@@ -11,7 +11,9 @@ module.exports = (req, res, next) => {
   try {
     const token = authHeader.split(' ')[1]
     const decoded = jwt.verify(token, JWT_SECRET)
+    // support handlers that expect either req.userId or req.user
     req.userId = decoded.id
+    req.user = decoded
     next()
   } catch {
     res.status(401).json({ error: 'Invalid token' })

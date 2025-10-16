@@ -26,6 +26,9 @@ app.use('/api/public', require('./routes/publicRoutes'))
 app.use('/api/complaints', require('./routes/clientCompat'))
 app.use('/api/complaints', require('./routes/complaint'))
 
+// Debug routes
+app.use('/api/debug', require('./routes/debug'))
+
 
 app.get('/', (req, res) => {
   res.send('🌐 GovTrack API is running')
