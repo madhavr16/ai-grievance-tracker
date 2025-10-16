@@ -20,20 +20,46 @@ app.use(cors(corsOptions))
 app.options('*', cors(corsOptions))
 app.use(express.json())
 
+// Diagnostic: print env vars that look like URLs to help debug path-to-regexp errors during deploy
+try {
+  const urlLike = Object.keys(process.env).filter(k => /url|uri|path/i.test(k) && /https?:\/\//i.test(process.env[k] || ''))
+  if (urlLike.length) {
+    console.log('🔎 Environment variables that look like URLs:')
+    urlLike.forEach(k => {
+      const v = process.env[k]
+      const safe = v.length > 30 ? v.slice(0, 20) + '...' + v.slice(-7) : v
+      console.log(` - ${k} = ${safe}`)
+    })
+  }
+} catch (e) {
+  console.warn('Could not enumerate environment variables for diagnostics')
+}
+
 // Routes
-app.use('/api/admin', require('./routes/authRoutes'))
-app.use('/api/public', require('./routes/authRoutes'))
+// Routes (wrapped to log mounting errors)
+const mount = (path, modPath) => {
+  try {
+    const m = require(modPath)
+    app.use(path, m)
+    console.log(`🔌 Mounted ${modPath} at ${path}`)
+  } catch (err) {
+    console.error(`❌ Failed to mount ${modPath} at ${path}:`, err && err.message)
+  }
+}
+
+mount('/api/admin', './routes/authRoutes')
+mount('/api/public', './routes/authRoutes')
 
 // Admin complaint fetch route
-app.use('/api/admin', require('./routes/adminRoutes'))
-app.use('/api/public', require('./routes/publicRoutes'))
+mount('/api/admin', './routes/adminRoutes')
+mount('/api/public', './routes/publicRoutes')
 
 // Compatibility: accept legacy frontend POSTs to /api/complaints and handle like public complaint route
-app.use('/api/complaints', require('./routes/clientCompat'))
-app.use('/api/complaints', require('./routes/complaint'))
+mount('/api/complaints', './routes/clientCompat')
+mount('/api/complaints', './routes/complaint')
 
 // Debug routes
-app.use('/api/debug', require('./routes/debug'))
+mount('/api/debug', './routes/debug')
 
 
 app.get('/', (req, res) => {
