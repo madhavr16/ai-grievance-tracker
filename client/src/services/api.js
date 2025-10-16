@@ -5,11 +5,12 @@ import.meta.env
 const rawApiUrl = import.meta.env.VITE_API_URL || 'http://56.228.30.161:5000'
 // remove trailing slash
 let normalizedApiUrl = rawApiUrl.replace(/\/+$/, '')
-// If the provided URL already includes a trailing '/api', strip it so client paths like '/api/...' don't become '/api/api/...'
+// If the provided URL already includes a trailing '/api', strip it then append a single '/api'
 normalizedApiUrl = normalizedApiUrl.replace(/\/api$/i, '')
+const apiRoot = `${normalizedApiUrl}/api`
 
 const instance = axios.create({
-  baseURL: normalizedApiUrl, // base URL is the server root (no trailing /api)
+  baseURL: apiRoot, // base URL is the server API root (ends with /api)
   headers: {
     'Content-Type': 'application/json',
   },
