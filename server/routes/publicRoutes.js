@@ -17,15 +17,26 @@ const axios = require('axios')
 
 // Submit a new complaint
 router.post('/complaint', async (req, res) => {
-  const { userText, locality, name, phone } = req.body
+  // Log incoming request for debugging
+  console.log('📥 /api/public/complaint received body:', req.body)
+  const { userText, locality, name, phone } = req.body || {}
 
-  if (!userText || !locality || !name || !phone) {
-    return res.status(400).json({ error: 'All fields are required' })
+  // Validate and return which fields are missing to make the client error clearer
+  const missing = []
+  if (!userText) missing.push('userText')
+  if (!locality) missing.push('locality')
+  if (!name) missing.push('name')
+  if (!phone) missing.push('phone')
+  if (missing.length) {
+    console.warn('⚠️ Missing fields in complaint submission:', missing)
+    return res.status(400).json({ error: 'Missing required fields', missing })
   }
 
   try {
-    // 🧠 Call ML service from Express backend
-    const mlRes = await axios.post('http://ml:8000/predict', {
+    // 🧠 Call ML service from Express backend. Use ML_URL env var when deployed to Render.
+    const mlBase = (process.env.ML_URL || 'http://ml:8000').replace(/\/+$/, '')
+    const mlEndpoint = `${mlBase}/predict`
+    const mlRes = await axios.post(mlEndpoint, {
       name,
       phone,
       description: userText,

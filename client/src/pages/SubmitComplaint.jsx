@@ -18,10 +18,12 @@ const SubmitComplaint = () => {
     if (!token) return navigate('/')
 
     try {
-      // Call only Express API, not ML directly
+      const payload = { name, phone, locality, userText }
+      console.log('➡️ Submitting complaint payload:', payload)
+      // Call Express public complaint endpoint which will call the ML service server-side
       await axios.post(
-        '/complaints',
-        { name, phone, locality, userText },
+        '/api/public/complaint',
+        payload,
         { headers: { Authorization: `Bearer ${token}` } }
       )
 
@@ -32,7 +34,12 @@ const SubmitComplaint = () => {
       setPhone('')
       setError('')
     } catch (err) {
-      console.error('❌ Submission error:', err)
+      // Log full axios response body if available
+      if (err && err.response && err.response.data) {
+        console.error('❌ Submission error response data:', err.response.data)
+      } else {
+        console.error('❌ Submission error:', err)
+      }
       setError('❌ Failed to submit complaint.')
       setSuccess('')
     }

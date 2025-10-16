@@ -10,9 +10,15 @@ dept_model, urgency_model = load_models()
 ##creating fastapi app
 app = FastAPI()
 
+import os
+
+# Configure allowed origins via FRONTEND_URL env var to match deployed frontend (Vercel)
+frontend = os.getenv('FRONTEND_URL', 'http://localhost:5173').rstrip('/')
+allowed = [frontend, 'http://localhost:5173']
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://ai-grievance-tracker.vercel.app/"],  # or specify ["http://localhost:3000"] for frontend dev
+    allow_origins=allowed,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

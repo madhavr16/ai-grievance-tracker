@@ -14,7 +14,7 @@ const PublicDashboard = () => {
 
     const fetchData = async () => {
       try {
-        const res = await axios.get('/complaints', {
+        const res = await axios.get('/api/complaints', {
           headers: { Authorization: `Bearer ${token}` }
         })
         setComplaints(res.data)
