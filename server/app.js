@@ -5,13 +5,19 @@ const app = express()
 
 // Allow configuring frontend origin via FRONTEND_URL environment variable for deployed frontend (Vercel)
 const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/+$/, '')
-app.use(cors({
-  origin: [
-    frontendUrl,
-    'http://localhost:5173'
-  ],
-  credentials: true
-}));
+console.log('🌐 Configured FRONTEND_URL for CORS:', frontendUrl)
+
+const corsOptions = {
+  origin: [frontendUrl, 'http://localhost:5173'],
+  credentials: true,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With'],
+  preflightContinue: false
+}
+
+app.use(cors(corsOptions))
+// Ensure OPTIONS preflight is handled for all routes
+app.options('*', cors(corsOptions))
 app.use(express.json())
 
 // Routes
