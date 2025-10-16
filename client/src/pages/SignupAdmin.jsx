@@ -20,8 +20,8 @@ const SignupAdmin = () => {
         ? { email, phone, password, department }
         : { email, password }
 
-      const url = isSignup ? '/admin/register' : '/admin/login'
-      const res = await axios.post(url, payload)
+  const url = isSignup ? '/api/admin/register' : '/api/admin/login'
+  const res = await axios.post(url, payload)
       localStorage.setItem('token', res.data.token)
       localStorage.setItem('role', 'admin') // ✅ set admin role
       navigate('/dashboard')
