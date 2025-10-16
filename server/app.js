@@ -39,11 +39,19 @@ try {
 // Routes (wrapped to log mounting errors)
 const mount = (path, modPath) => {
   try {
+    console.log(`🧩 Requiring module ${modPath} for mount at ${path}...`)
     const m = require(modPath)
+    if (!m) {
+      console.error(`❌ Module ${modPath} exported falsy value`)
+      return
+    }
+    // Basic type check to avoid passing non-function/non-router to app.use
+    const t = typeof m
+    console.log(`🧩 Module ${modPath} type: ${t}`)
     app.use(path, m)
     console.log(`🔌 Mounted ${modPath} at ${path}`)
   } catch (err) {
-    console.error(`❌ Failed to mount ${modPath} at ${path}:`, err && err.message)
+    console.error(`❌ Failed to mount ${modPath} at ${path}:`, err && err.stack ? err.stack : err && err.message)
   }
 }
 
