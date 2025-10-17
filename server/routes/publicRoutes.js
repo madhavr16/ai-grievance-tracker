@@ -38,6 +38,17 @@ router.post('/complaint', async (req, res) => {
     const mlEndpoint = `${mlBase}/predict`
     console.log('➡️ Calling ML endpoint:', mlEndpoint)
     let mlData = null
+    const normalizePred = (v) => {
+      if (v === null || v === undefined) return null
+      if (typeof v === 'string') {
+        const s = v.trim()
+        if (!s) return null
+        if (/^(NA|N\/A|unknown|unavailable)$/i.test(s)) return null
+        return s
+      }
+      return v
+    }
+
     try {
       const mlRes = await axios.post(
         mlEndpoint,
@@ -46,6 +57,7 @@ router.post('/complaint', async (req, res) => {
       )
       mlData = mlRes.data || null
       console.log('⬅️ ML responded with status', mlRes.status)
+      console.log('ℹ️ ML response body:', JSON.stringify(mlData))
     } catch (mlErr) {
       console.warn('⚠️ ML service call failed:', mlErr && mlErr.message)
       // continue without ML predictions
@@ -57,10 +69,16 @@ router.post('/complaint', async (req, res) => {
       locality,
       name,
       phone,
-      department: mlData ? mlData.predicted_department : null,
-      urgency: mlData ? mlData.predicted_urgency : null,
-      translatedText: mlData ? mlData.translated_description : null,
-      entities: mlData ? mlData.entities : []
+      department: mlData
+        ? normalizePred(mlData.predicted_department) || normalizePred(mlData.department)
+        : null,
+      urgency: mlData
+        ? normalizePred(mlData.predicted_urgency) || normalizePred(mlData.urgency)
+        : null,
+      translatedText: mlData
+        ? mlData.translated_description || mlData.translatedText || null
+        : null,
+      entities: mlData ? mlData.entities || [] : []
     })
 
     await complaint.save()

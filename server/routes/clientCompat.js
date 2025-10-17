@@ -21,6 +21,17 @@ router.post('/', async (req, res) => {
         const mlBase = (process.env.ML_URL || 'http://ml:8000').replace(/\/+$/, '')
         const mlEndpoint = `${mlBase}/predict`
         console.log('➡️ Calling ML endpoint (compat):', mlEndpoint)
+        const normalizePred = (v) => {
+            if (v === null || v === undefined) return null
+            if (typeof v === 'string') {
+                const s = v.trim()
+                if (!s) return null
+                if (/^(NA|N\/A|unknown|unavailable)$/i.test(s)) return null
+                return s
+            }
+            return v
+        }
+
         const mlRes = await axios.post(mlEndpoint, {
             name,
             phone,
@@ -29,16 +40,17 @@ router.post('/', async (req, res) => {
         })
 
         const mlData = mlRes.data || {}
+        console.log('ℹ️ ML response body (compat):', JSON.stringify(mlData))
 
         const complaint = new Complaint({
             userText,
             locality,
             name,
             phone,
-            department: mlData.predicted_department,
-            urgency: mlData.predicted_urgency,
-            translatedText: mlData.translated_description,
-            entities: mlData.entities
+            department: normalizePred(mlData.predicted_department) || normalizePred(mlData.department),
+            urgency: normalizePred(mlData.predicted_urgency) || normalizePred(mlData.urgency),
+            translatedText: mlData.predicted_description || mlData.translated_description || null,
+            entities: mlData.entities || []
         })
 
         await complaint.save()

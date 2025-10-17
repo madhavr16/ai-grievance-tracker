@@ -80,6 +80,8 @@ mount('/api/complaints', './routes/complaint')
 
 // Debug routes
 mount('/api/debug', './routes/debug')
+// ML debug/proxy routes
+mount('/api/ml', './routes/mlDebug')
 
 
 app.get('/', (req, res) => {
