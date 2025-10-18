@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const mlBase = (process.env.ML_URL || 'http://ml:8000').replace(/\/+$/, '')
+    const mlBase = ((process.env.ML_URL || process.env.VITE_ML_URL) || 'http://ml:8000').replace(/\/+$/, '')
         const mlEndpoint = `${mlBase}/predict`
         console.log('➡️ Calling ML endpoint (compat):', mlEndpoint)
         const normalizePred = (v) => {

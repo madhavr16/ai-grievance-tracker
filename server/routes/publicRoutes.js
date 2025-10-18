@@ -34,7 +34,8 @@ router.post('/complaint', async (req, res) => {
 
   try {
     // 🧠 Call ML service from Express backend. Use ML_URL env var when deployed to Render.
-    const mlBase = (process.env.ML_URL || 'http://ml:8000').replace(/\/+$/, '')
+  // Allow either ML_URL (standard) or VITE_ML_URL (set by some deploys/frontends)
+  const mlBase = ((process.env.ML_URL || process.env.VITE_ML_URL) || 'http://ml:8000').replace(/\/+$/, '')
     const mlEndpoint = `${mlBase}/predict`
     console.log('➡️ Calling ML endpoint:', mlEndpoint)
     let mlData = null

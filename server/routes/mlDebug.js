@@ -7,7 +7,7 @@ router.post('/predict-proxy', async (req, res) => {
     if (!description) return res.status(400).json({ error: 'description required' })
 
     try {
-        const mlBase = (process.env.ML_URL || 'http://ml:8000').replace(/\/+$/, '')
+    const mlBase = ((process.env.ML_URL || process.env.VITE_ML_URL) || 'http://ml:8000').replace(/\/+$/, '')
         const mlEndpoint = `${mlBase}/predict`
         console.log('➡️ Proxying to ML endpoint:', mlEndpoint)
         const mlRes = await axios.post(mlEndpoint, { name, phone, description, location }, { timeout: 5000 })
