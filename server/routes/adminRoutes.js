@@ -40,7 +40,7 @@ router.post('/complaints/reclassify-missing', authMiddleware, async (req, res) =
     const missing = await Complaint.find({ $or: [{ department: null }, { urgency: null }] }).limit(limit)
     if (!missing || missing.length === 0) return res.json({ message: 'No missing classifications found' })
 
-  const mlBase = ((process.env.ML_URL || process.env.VITE_ML_URL) || 'http://ml:8000').replace(/\/+$/, '')
+    const mlBase = ((process.env.ML_URL || process.env.VITE_ML_URL) || 'http://ml:8000').replace(/\/+$/, '')
     const mlEndpoint = `${mlBase}/predict`
 
     const normalizePred = (v) => {
